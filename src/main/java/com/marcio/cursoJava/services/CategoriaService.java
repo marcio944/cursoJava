@@ -1,10 +1,13 @@
 package com.marcio.cursoJava.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.marcio.cursoJava.domain.Categoria;
 import com.marcio.cursoJava.repositories.CategoriaRepository;
+import com.marcio.cursoJava.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -12,11 +15,13 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository repo;
 	
-	public Categoria buscar(Integer id) {
+	public Categoria find(Integer id) {
 		
-		Categoria obj = repo.getOne(id);
-		return obj;
+		Optional<Categoria> obj = repo.findById(id);
 		
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: " + id + 
+				"Tipo: " + Categoria.class.getName()));
+				
 	}
 	
 }
